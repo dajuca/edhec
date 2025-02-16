@@ -26,7 +26,7 @@ You can now sell your big GPU-laptop and buy a lightweight computer like real ML
 
 <br>
 
-# 1️⃣ New taxifare package setup
+# 1️⃣ New lyxury package setup
 
 <details>
   <summary markdown='span'><strong>❓Instructions (expand me)</strong></summary>
