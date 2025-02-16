@@ -1,10 +1,11 @@
 ## Google Big Query
-Cli help
+#### Cli help
 
+```bash
 bq help                                 # list all sub commands
 bq ls --help                            # help for `ls` sub command
-
-Datasets
+```
+#### Datasets
 
 DATASET=app_dataset
 PROJECT=project-id
@@ -23,7 +24,7 @@ bq ls $DATASET                          # list dataset tables
 
 bq rm -r -f $DATASET      
 
-Tables
+#### Tables
 
 DATASET=app_dataset
 TABLE=data_table
@@ -39,7 +40,7 @@ bq show $DATASET.$TABLE                 # show table format
 
 bq rm -f $DATASET.$TABLE                # remove dataset table
 
-Queries
+#### Queries
 
 DATASET=app_dataset
 TABLE=data_table
@@ -53,7 +54,7 @@ bq query \
     "SELECT * FROM $DATASET.INFORMATION_SCHEMA.PARTITIONS"
 
 
-Data import
+#### Data import
 
 DATASET=app_dataset
 PROJECT=project-id
