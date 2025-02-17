@@ -8,7 +8,7 @@ In the previous unit, you have **packaged** 📦 the notebook of the _EHEC_ Data
 
 🎯 Today, you will refactor the previous unit's codebase and:
 - Fetch all your environment variables from a single `.env` file instead of updating `params.py`
-- Load the raw data from Le Wagon BigQuery in one go in memory (no chunks)
+- Load the raw data from Big Query in one go in memory 
 - Cache a local CSV copy to avoid querying the data twice
 - Process the data
 - Upload the processed data to your own BigQuery table
