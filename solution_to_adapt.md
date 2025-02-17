@@ -104,7 +104,7 @@ make reinstall_package # always check what make does in the Makefile
 
 **🧪 Check the package version**
 ```bash
-pip list | grep taxifare
+pip list | grep luxury
 # luxury              0.0.7
 ```
 
@@ -156,13 +156,6 @@ From now on, every time you need to update the behavior of the project:
 direnv reload . # to reload your env variables 🚨🚨
 ```
 
-**☝️ You *will* forget that. Prove us wrong 😝**
-
-```bash
-# Ok so, for this unit, alway keep data size values small (good practice for dev purposes)
-DATA_SIZE=1k
-CHUNK_SIZE=200
-```
 
 </details>
 
@@ -210,7 +203,7 @@ We'll use it to store large and unstructured data such as model weights :)
 
 e.g.
 ```bash
-BUCKET_NAME = taxifare_<user.github_nickname>
+BUCKET_NAME = luxury_<user.github_nickname>
 ```
 - `direnv reload .` ;)
 
@@ -747,7 +740,7 @@ A faster way to start and stop your virtual machine is to use the command line. 
 Have a look at the `gcloud compute instances` command in order to start, stop, or list your instances:
 
 ``` bash
-INSTANCE=taxi-instance
+INSTANCE=luxury-instance
 
 gcloud compute instances stop $INSTANCE
 gcloud compute instances list
