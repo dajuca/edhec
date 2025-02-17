@@ -1,6 +1,6 @@
 # 🪐 Enter the Dimension of Cloud Computing! 🚀
 
-In the previous unit, you have **packaged** 📦 the notebook of the _EHEC_ Data Science team
+In the previous unit, you have **packaged** 📦 the notebook of the EHEC Data Science team
 
 ☁️ In this unit, you will learn how to dispatch work to a pool of **cloud resources** instead of using your local machine.
 
