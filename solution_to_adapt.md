@@ -600,7 +600,7 @@ python -c "from google.cloud import storage; \
 </details>
 
 Your _VM_ is now fully operational with:
-- A python virtualenv (taxifare-env) to run your code
+- A python virtualenv (luxury-env) to run your code
 - The credentials to connect to your _GitHub_ account
 - The credentials to connect to your _GCP_ account
 
