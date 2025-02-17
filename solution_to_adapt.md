@@ -44,8 +44,7 @@ Here are the main files of interest:
 ├── luxury-project
 │   ├── __init__.py
 │   ├── interface
-│   │   └── main_local.py           # 🚪 (OLD) entry point
-│   │   └── main.py                 # 🚪 (NEW) entry point: No more chunks 😇 - Just process(), train()
+│   │   └── main.py                 
 │   ├── ml_logic
 │       ├── data.py                 # (UPDATED) Loading and storing data from/to BigQuery !
 │       ├── registry.py             # (UPDATED) Loading and storing model weights from/to Cloud Storage!
@@ -58,30 +57,28 @@ Here are the main files of interest:
 
 #### ⚙️ `.env.sample`
 
-This file is a _template_ designed to help you create a `.env` file for each challenge. The `.env.sample` file contains the variables required by the code and expected in the `.env` file. 🚨 Keep in mind that the `.env` file **should never be tracked with Git** to avoid exposing its content, so we have added it to your `.gitignore`.
+This file is a _template_ designed to help you create a `.env` file . The `.env.sample` file contains the variables required by the code and expected in the `.env` file. 🚨 Keep in mind that the `.env` file **should never be tracked with Git** to avoid exposing its content, so we have added it to your `.gitignore`.
 
 #### 🚪 `main.py`
 
-Bye bye `luxury.interface.main_local` module, you served us well ❤️
 
-Long live `luxury.interface.main`, our new package entry point ⭐️ to:
+Long live `luxury.interface.main`, our package entry point ⭐️ to:
 
 - `preprocess`: preprocess the data and store `data_processed`
 - `train`: train on processed data and store model weights
 - `evaluate`: evaluate the performance of the latest trained model on new data
 - `pred`: make a prediction on a `DataFrame` with a specific version of the trained model
 
-
-🚨 One main change in the code of the package is that we chose to delegate some of its work to dedicated modules in order to limit the size of the `main.py` file. The main changes concern:
+Some info about the code:
 
 - The project configuration: the single source of truth is `.env`
   - `.envrc` tells `direnv` to load the `.env` as environment variables
   - `params.py` then loads all these variable in python, and should not be changed manually anymore
 
-- `registry.py`: the code evolved to store the trained model either locally or - _spoiler alert_ - in the cloud
+- `registry.py`: the code to store the trained model either locally or - _spoiler alert_ - in the cloud
   - Notice the new env variable `MODEL_TARGET` (`local` or `gcs`)
 
-- `data.py` has refactored 2 methods that we'll use heavily in `main.py`
+- `data.py` has 2 methods that we'll use heavily in `main.py`
   - `get_data_with_cache()` (get some data from BigQuery or a cached CSV if exists)
   - `load_data_to_bq()` (upload some data to BQ)
 
@@ -170,7 +167,6 @@ direnv reload . # to reload your env variables 🚨🚨
 
 - Find the `gcloud` command that lists your own **GCP project ID**.
 - 📝 Fill in the `GCP_PROJECT` variable in the `.env` project configuration with the ID of your GCP project
-- 🧪 Run the tests with `make test_gcp_project`
 
 <details>
   <summary markdown='span'><strong>💡 Hint </strong></summary>
@@ -197,7 +193,7 @@ We'll use it to store large and unstructured data such as model weights :)
 
 e.g.
 ```bash
-BUCKET_NAME = luxury_<user.github_nickname>
+BUCKET_NAME = luxury_<user.github_nickname> or luxury_<edhec_email> 
 ```
 - `direnv reload .` ;)
 
@@ -224,8 +220,6 @@ Do you see how much slower the GCP console (web interface) is compared to the co
 
 </details>
 
-**🧪 Run the tests with `make test_gcp_bucket`**
-
 ### c) BigQuery and the `bq` CLI
 
 BiqQuery is a data warehouse, used to store structured data, that can be queried rapidly.
@@ -235,6 +229,7 @@ BiqQuery is a data warehouse, used to store structured data, that can be queried
 - Data is stored by columns (as opposed to rows on PostgreSQL for instance)
 - It's optimized for large transformations such as `group-by`, `join`, `where` etc.
 - But it's not optimized for frequent row-by-row insert/delete
+- BTW Tip info, Big Query is not optmized for normalized data (as many people think it would improve performance) !
 
 Ideally we should be using a managed PostgreSQL (e.g. [Google Cloud SQL](https://cloud.google.com/sql)) as its main production database on which its Django app is storing / reading hundred thousands of individual transactions per day!
 
@@ -247,15 +242,15 @@ Every night, (ideally) our project should launche a "database replication" job t
 
 **💻 Let's create our own dataset where we'll store and query preprocessed data !**
 
-- Using `bq` and the following env variables, create a new _dataset_ called `taxifare` on your own `GCP_PROJECT`
+- Using `bq` and the following env variables, create a new _dataset_ called `{Your_chosen_brand}` on your own `GCP_PROJECT`
 
 ```bash
-BQ_DATASET=taxifare
+BQ_DATASET={Your_brand}
 BQ_REGION=...
 GCP_PROJECT=...
 ```
-
-- Then add 3 new _tables_ `processed_1k`, `processed_200k`, `processed_all`
+and create some tables for the API features for example
+Or the Scrapped data
 
 <details>
   <summary markdown='span'>💡 Hints</summary>
@@ -276,28 +271,14 @@ bq mk \
     --data_location $BQ_REGION \
     $BQ_DATASET
 
-bq mk --location=$GCP_REGION $BQ_DATASET.processed_1k
-bq mk --location=$GCP_REGION $BQ_DATASET.processed_200k
-bq mk --location=$GCP_REGION $BQ_DATASET.processed_all
+bq mk --location=$GCP_REGION $BQ_DATASET.processed_API
+bq mk --location=$GCP_REGION $BQ_DATASET.processed_scrapped
 
 bq show
 bq show $BQ_DATASET
-bq show $BQ_DATASET.processed_1k
+bq show $BQ_DATASET.processed_scrapped
 
 ```
-
-</details>
-
-**🧪 Run the tests with `make test_big_query`**
-
-
-🎁 Look at `make reset_all_files` directive --> It resets all local files (csvs, models, ...) and data from bq tables and buckets, but preserves local folder structure, bq tables schema, and gsutil buckets.
-
-Very useful to reset the state of your challenge if you are uncertain and you want to debug yourself!
-
-👉 Run `make reset_all_files` safely now, it will remove files from unit 01 and make it clearer
-
-👉 Run `make show_sources_all` to see that you're back from a blank state!
 
 
 </details>
@@ -321,8 +302,14 @@ To do so, you can either:
 
 - 🥵 Uncomment the routes above, one after the other, and run `python -m luxury.interface.main` from your Terminal
 
-- 😇 Smarter: use each of the following `make` commands that we created for you below
+- 😇 Smarter: use each of the following `make` commands
 
+  Ex :
+  ```
+  run_preprocess:
+	python -c 'from luxury.interface.main_local import preprocess_and_train; preprocess_and_train()'
+  ```
+  
 💡 Make sure to read each function docstring carefully
 💡 Don't try to parallelize route completion. Fix them one after the other.
 💡 You will also need to code the `load_data_to_bq()` function in `data.py`.
@@ -330,7 +317,6 @@ To do so, you can either:
 
 **Preprocess**
 
-💡 Feel free to refer back to `main_local.py` when needed! Some of the syntax can be re-used
 
 ```bash
 # Call your preprocess()
@@ -342,7 +328,7 @@ make test_preprocess
 **Train**
 
 💡 Make sure to understand what happens when MODEL_TARGET = 'gcs' vs 'local'
-💡 We advise you to set `verbose=0` on model training to shorten your logs!
+
 
 ```bash
 make run_train
@@ -352,6 +338,7 @@ make test_train
 **Evaluate**
 
 Make sure to understand what happens when MODEL_TARGET = 'gcs' vs 'local'
+
 ```bash
 make run_evaluate
 make test_evaluate
@@ -409,7 +396,7 @@ Head over to the GCP console, specifically the [Compute Engine page](https://con
 
   Go to the **"Boot disk"** section, click on **"CHANGE"** at the bottom, change the **operating system** to **Ubuntu**, and select the latest **Ubuntu xx.xx LTS x86/64** (Long Term Support) version. (Do <u>not</u> pick a "Minimal" version: we would have to install too many tools manually.)
 
-  Ubuntu is the [Linux distro](https://en.wikipedia.org/wiki/Linux_distribution) that will resemble the configuration on your machine the most, following the [Le Wagon setup](https://github.com/lewagon/data-setup). Whether you are on a Mac, using Windows WSL2 or on native Linux, selecting this option will allow you to play with a remote machine 
+  Ubuntu is the [Linux distro](https://en.wikipedia.org/wiki/Linux_distribution) that will resemble the configuration on your machine the most (MacOs or WLS that we just installed today). Whether you are on a Mac, using Windows WSL2 or on native Linux, selecting this option will allow you to play with a remote machine 
   using the commands you are already familiar with.
 </details>
 
@@ -471,7 +458,7 @@ gcloud compute ssh $INSTANCE
 <details>
   <summary markdown='span'><strong> ⚙️ <code>zsh</code> and <code>omz</code> (expand me)</strong></summary>
 
-The **zsh** shell and its **Oh My Zsh** framework are the _CLI_ configuration you are already familiar with. When prompted, make sure to accept making `zsh` the default shell.
+The **zsh** shell and its **Oh My Zsh** framework are the _CLI_ configuration you should be familiar with. When prompted, make sure to accept making `zsh` the default shell.
 
 ``` bash
 sudo apt update
@@ -562,7 +549,7 @@ Copy your private key 🔑 to the _VM_ in order to allow it to access your GitHu
 ⚠️ Run this single command on your machine, not on the VM ⚠️
 
 ``` bash
-INSTANCE=taxi-instance
+INSTANCE=luxury-instance
 
 # scp stands for secure copy (cp)
 gcloud compute scp ~/.ssh/id_ed25519 $USER@$INSTANCE:~/.ssh/
