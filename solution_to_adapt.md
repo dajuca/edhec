@@ -9,18 +9,16 @@ In the previous unit, you have **packaged** 📦 the notebook of the EHEC Data S
 🎯 Today, you will refactor the previous unit's codebase and:
 - Fetch all your environment variables from a single `.env` file instead of updating `params.py`
 - Load the raw data from Big Query in one go in memory 
-- Cache a local CSV copy to avoid querying the data twice
 - Process the data
 - Upload the processed data to your own BigQuery table
 - Download the processed data (in one go)
-- Cache a local CSV copy to avoid querying the data twice
 - Train your model on this processed data
 - Store the model weights on your own Google Cloud Storage (GCS) bucket
 
 Then, you'll provision a Virtual Machine (VM) to run this whole workflow on the VM !
 
 Congratulations, you just grew from a **Data Scientist** into a full **ML Engineer**!
-You can now sell your big GPU-laptop and buy a lightweight computer like real ML practitioners 😝
+You can now sell your big GPU-laptop and buy a lightweight computer like real ML practitioners XD !
 
 ---
 
