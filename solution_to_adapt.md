@@ -32,10 +32,6 @@ You can now sell your big GPU-laptop and buy a lightweight computer like real ML
 
 ## Project Structure
 
-👉 From now on, you will start each new challenge with the solution of the previous challenge.
-
-👉 Each new challenge will bring in an additional set of features.
-
 Here are the main files of interest:
 ```bash
 .
