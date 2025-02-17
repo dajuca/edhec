@@ -1,6 +1,6 @@
 # 🪐 Enter the Dimension of Cloud Computing! 🚀
 
-In the previous unit, you have **packaged** 📦 the notebook of the _EHEC_ Data Science team, and updated the code with **chunk-processing** so that the model could be trained on the full _luxyry_ dataset despite running on a "small" local machine.
+In the previous unit, you have **packaged** 📦 the notebook of the _EHEC_ Data Science team
 
 ☁️ In this unit, you will learn how to dispatch work to a pool of **cloud resources** instead of using your local machine.
 
